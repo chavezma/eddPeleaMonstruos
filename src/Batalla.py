@@ -1,11 +1,13 @@
+import os
+
 # Variables para iniciar-restaurar una batalla.
 
 # Monstruo 1 [nombre, vida, elementos, cantAtaquesEsp, turno] 
 # Monstruo 2 [nombre, vida, elementos, cantAtaquesEsp, turno]
 
-class Batalla:
+class Batalla():
 	
-	def __init__(self)
+	def __init__(self):
 		Jugadores = []
 		
 	def mostrarTitulo():
