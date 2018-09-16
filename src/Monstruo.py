@@ -1,3 +1,4 @@
+from Elemento import Elemento
 
 class Monstruo:
 	
@@ -7,12 +8,20 @@ class Monstruo:
 		self.elementos = elementos
 		self.vida = 100
 
-	def getElementos():
+	def __repr__(self):
+		printelem = ""
+		for x in self.elementos:
+			printelem += "[" + str(x) + "]\n"
+
+		return "Monstruo = [" + self.nombre + "] - elementos \n" + printelem
+
+	def get_Elementos(self):
 		return self.elementos
 
-	def restarVida(danio):
-		if self.vida -= danioAtaque) < 0:
-			this.vida = 0
+	def restar_vida(self, danioataque):
+		self.vida -= danioataque
+		if self.vida < 0:
+			self.vida = 0
 
-	def getVida():
+	def get_vida(self):
 		return self.vida
