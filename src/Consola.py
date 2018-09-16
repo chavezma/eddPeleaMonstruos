@@ -55,7 +55,7 @@ if __name__ == '__main__':
         myconsola = Consola()
         opcion = ''
         opcorrecta = 0
-        myconsola.mostrar_titulo()
+
         while opcion != 'q':
             myconsola.mostrar_titulo()
             opcion = myconsola.mostrar_menu()
