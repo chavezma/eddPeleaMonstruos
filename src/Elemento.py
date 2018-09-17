@@ -50,6 +50,26 @@ class Elemento(Enum):
 	def elemento_4(self):
 		return Elemento.FUEGO
 
+	def get_elemento_desc(self, idx):
+		"""Dispatch method"""
+		method_name = 'elemento_' + str(idx)
+		# Get the method from 'self'. Default to a lambda.
+		method = getattr(self, method_name, lambda: "Elemento invalido")
+		# Call the method as we return it
+		return method()
+
+	def elemento_1(self):
+		return "AIRE"
+
+	def elemento_2(self):
+		return "TIERRA"
+
+	def elemento_3(self):
+		return "AGUA"
+
+	def elemento_4(self):
+		return "FUEGO"
+
 	def tiene_plus_ataque(self, elemento):
 		# Quien tiene plus de ataque contra param
 		# AGUA --> AIRE --> TIERRA --> FUEGO --> AGUA
