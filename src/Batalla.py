@@ -20,43 +20,42 @@ class Battle:
         else:
             elem = "segundo"
 
-        print("Elija su " + elem + " elemento")
-        print("[1] AIRE.")
-        print("[2] TIERRA.")
-        print("[3] AGUA.")
-        print("[4] FUEGO.")
+        print("\t\tElija su " + elem + " elemento")
+        print("\t\t[1] AIRE.")
+        print("\t\t[2] TIERRA.")
+        print("\t\t[3] AGUA.")
+        print("\t\t[4] FUEGO.")
 
     def __repr__(self):
         return "Batalla Turno = [" + str(self.turno) + "]"
 
     def mostrar_turno(self):
-        print("****  Es el turno de [" + str(self.turno) + "] ****")
-        print("**********************************************")
+        print("\t****  Es el turno de [" + str(self.turno) + "] ****")
+        print("\t**********************************************")
 
-    def crear_monstruo(self):
+    def crear_monstruo(self, idx_jugador):
         elemento = []
         nombre = ""
         ups = Elemento(1)
 
-        nombre = str(input("Ingrese su nombre:"))
+        nombre = str(input("\tIngrese su nombre:"))
 
         for idx_elemento in range(1, 3):
             self.print_elementos(idx_elemento)
-            choose = int(input("Opcion:"))
-            print("Eleccion realizada [" + str(choose) + "].")
-            input("presionar algo....")
+            choose = int(input("\tOpcion:"))
+            #print("\tEleccion realizada [" + str(choose) + "].")
+            #input("\tpresionar algo....")
             elemento.append(Elemento(choose))
 
-        return Monstruo(nombre, elemento)
+        return Monstruo(idx_jugador, nombre, elemento)
 
     def config_jugadores(self, mostrar_titulo):
         idx_jugador = 0
 
         for idx_jugador in range(1, 3):
             mostrar_titulo()
-            print("\n")
-            print("****  Cargando informacion del jugador " + str(idx_jugador) + " ****")
-            self.jugadores.append(self.crear_monstruo())
+            print("\n\t****  Cargando informacion del jugador " + str(idx_jugador) + " ****")
+            self.jugadores.append(self.crear_monstruo(idx_jugador))
 
         for jugador in self.jugadores:
             print(jugador)
@@ -71,20 +70,20 @@ class Battle:
 
         while op_ok == "NO":
             idx_op = 1
-            print("Elija el tipo de ataque que desea utilizar")
+            print("\t\tElija el tipo de ataque que desea utilizar")
             for elem in jugador.elementos:
-                print("[" + str(idx_op) + "] NORMAL tipo " + str(elem))
+                print("\t\t[" + str(idx_op) + "] NORMAL tipo " + str(elem))
                 idx_op += 1
 
             if jugador.cant_esp_att < 4:
                 for elem in jugador.elementos:
-                    print("[" + str(idx_op) + "] NORMAL tipo " + str(elem))
+                    print("\t\t[" + str(idx_op) + "] ESPECIAL tipo " + str(elem))
                     idx_op += 1
 
-            print("[5] Guardar.")
-            print("[6] Salir.")
+            print("\t\t[5] Guardar.")
+            print("\t\t[6] Salir.")
 
-            idxopelegida = int(input("Elegir opcion: "))
+            idxopelegida = int(input("\t\tElegir opcion: "))
 
             if idxopelegida in lista_op_validas:
                 op_ok = "SI"
@@ -98,14 +97,15 @@ class Battle:
         elif idxopelegida == 4:
             return tipo_ataque.ESPECIAL, jugador.elementos[1]
 
-
-    def comenzarpelea(self):
+    def comenzarpelea(self, mostrar_titulo):
         ataque_elegido = 0
         tipo_elemento_ataque = 0
+        danio_total = 0
+        calculo = ""
 
         salir = "no"
         while salir == "no":
-
+            mostrar_titulo()
             if self.turno == Turno.Jugador1:
                 ataca = self.jugadores[Turno.Jugador1.value]
                 defiende = self.jugadores[Turno.Jugador2.value]
@@ -115,17 +115,27 @@ class Battle:
 
             self.mostrar_turno()
             ataque_elegido, tipo_elemento_ataque = self.elegir_ataque(ataca)
-            defiende.recibir_ataque(ataque_elegido, tipo_elemento_ataque)
+            danio_total, calculo = defiende.recibir_ataque(ataque_elegido, tipo_elemento_ataque)
+
+            print("\n\t\tDanio calculado por Jugador " + str(defiende.id_jugador) + "")
+            print("\t\t[Danio Total = Danio Base + Plus Ataque - Plus Defensa]")
+            print("\t\t" + calculo)
+            print("\t\tPunto de vida: [" + str(defiende.vida) + "]")
+
+            if self.turno == Turno.Jugador2:
+                print("\n\t\tResumen de la ronda...")
+                for jugador in self.jugadores:
+                    print("\t" + str(jugador))
+
+            self.turno = Turno((self.turno.value + 1) % 2)
 
             for jugador in self.jugadores:
                 if jugador.vida == 0:
                     salir = "si"
+                    print("\n\t\tEl juego ha finalizado...")
+                    input("")
 
-            self.turno = Turno( (self.turno.value + 1) % 2 )
-            print("***********atacante*************")
-            print(ataca)
-            print("***********defensor*************")
-            print(defiende)
+            input("\n\t\tpresioanr cualquier tecla para continuar...")
 
     def cargarjuego(self):
         pass

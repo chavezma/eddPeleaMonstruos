@@ -16,37 +16,37 @@ class Consola:
 
     def mostrar_menu(self):
         print("\n")
-        print("[1] Nuevo Juego.")
-        print("[2] Cargar.")
-        print("[q] Salir.")
+        print("\t[1] Nuevo Juego.")
+        print("\t[2] Cargar.")
+        print("\t[q] Salir.")
 
-        return input("Elegir una opción: ")
+        return input("\n\tElegir una opción: ")
 
     def obt_juegos_guardados(self):
         try:
             # Buscar el archivo batalla.save para dar a elegir que juego jugar.
-            juegos = ["partida hoy", "partida lunes", "partida domingo"]
+            juegos = ["partida hoy", "partida lunemostrar_titulos", "partida domingo"]
             idx = 1
             print("\nEstos son los juegos guardados.\n")
             for juego in juegos:
                 print("[" + str(idx) + "] " + juego)
                 idx = idx + 1
-            print("[0] Atras")
+            print("\t[0] Atras")
 
             idxjuego = int(input("Elegir opcion: "))
             while idxjuego < 0 or idxjuego > 2:
-                input("Opcion invalida, favor de elegir nuevamente...")
+                input("\tOpcion invalida, favor de elegir nuevamente...")
                 return 0
 
             if idxjuego == 0:
-                print("Eligio Atras")
+                print("\tEligio Atras")
             else:
-                print("Juego elegido " + juegos[idxjuego-1])
+                print("\tJuego elegido " + juegos[idxjuego-1])
                 input("")
             return 1
 
         except ValueError:
-            input("Opcion invalida, favor de elegir nuevamente...")
+            input("\tOpcion invalida, favor de elegir nuevamente...")
             return 0
 
 
@@ -61,12 +61,9 @@ if __name__ == '__main__':
             opcion = myconsola.mostrar_menu()
 
             if opcion == '1':
-                print("Arrancamos juego nuevo")
                 newbattle = Battle()
-                print("Batalla")
-                print(newbattle)
-                input("press to contnue.")
                 newbattle.config_jugadores(myconsola.mostrar_titulo)
+                newbattle.comenzarpelea(myconsola.mostrar_titulo)
 
             elif opcion == '2':
                 opcorrecta = 0
