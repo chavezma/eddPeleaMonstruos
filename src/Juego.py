@@ -28,45 +28,56 @@ class Juego:
 
         return opcion
 
-    def obt_juegos_guardados(self):
+    def mostrar_juegos_guardados(selfs):
         lstjuegos = []
         total_juegos = 0
+        # Buscar el archivo batalla.save para dar a elegir que juego jugar.
+        for files in os.walk(".\\savedgames"):
+            for filename in files:
+                for file in filename:
+                    if file.endswith(".save"):
+                        lstjuegos.append(file)
+
+        total_juegos = len(lstjuegos)
+        idx = 1
+        print("\nEstos son los juegos guardados.\n")
+        for juego in lstjuegos:
+            print("\t[" + str(idx) + "] " + juego)
+            idx = idx + 1
+        print("\t[0] Atras")
+
+        return lstjuegos
+
+    def cargar_juego(self):
+        lstjuegos = []
+        total_juegos = 0
+        opcion_ok = "no"
+        idxjuego = 0
+
         try:
-            # Buscar el archivo batalla.save para dar a elegir que juego jugar.
-            for files in os.walk(".\\savedgames"):
-                for filename in files:
-                    for file in filename:
-                        if file.endswith(".save"):
-                            lstjuegos.append(file)
+            lstjuegos = self.mostrar_juegos_guardados()
 
-            #juegos = ["partida hoy", "partida lunemostrar_titulos", "partida domingo"]
-            total_juegos = len(lstjuegos)
-
-            idx = 1
-            print("\nEstos son los juegos guardados.\n")
-            for juego in lstjuegos:
-                print("\t[" + str(idx) + "] " + juego)
-                idx = idx + 1
-            print("\t[0] Atras")
-
-            idxjuego = int(input("Elegir opcion: "))
-            while idxjuego < 0 or idxjuego > total_juegos:
-                input("\tOpcion invalida, favor de elegir nuevamente...")
-                return 0
+            while opcion_ok == "no":
+                try:
+                    idxjuego = int(input("Elegir opcion: "))
+                    opcion_ok = "si"
+                except ValueError:
+                    input("\tOpcion invalida, favor de elegir nuevamente...")
+                    continue
 
             if idxjuego == 0:
                 print("\tEligio Atras")
+                return Batalla(), "atras"
             else:
                 print("\tJuego elegido " + lstjuegos[idxjuego-1])
                 with open('.//savedgames//' + lstjuegos[idxjuego-1], 'rb') as load:
                     batalla = pickle.load(load)
                     input("\n\t\tPresionar cualquier tecla para continuar...")
-                    return batalla
-            return 1
+                    return batalla, "jugar"
 
         except ValueError:
             input("\tOpcion invalida, favor de elegir nuevamente...")
-            return 0
+            return batalla, "jugar"
 
 
 if __name__ == '__main__':
@@ -74,6 +85,7 @@ if __name__ == '__main__':
         myJuego = Juego()
         opcion = 0
         opcorrecta = 0
+        newbattle = Batalla()
 
         while opcion != 3:
             try:
@@ -81,16 +93,19 @@ if __name__ == '__main__':
                 opcion = myJuego.mostrar_menu()
 
                 if opcion == 1:
-                    newbattle = Batalla()
+
                     newbattle.config_jugadores(myJuego.mostrar_titulo)
                     newbattle.comenzarpelea(myJuego.mostrar_titulo)
 
                 elif opcion == 2:
-                    opcorrecta = 0
-                    while opcorrecta == 0:
-                        myJuego.mostrar_titulo()
-                        newbattle = myJuego.obt_juegos_guardados()
+                    myJuego.mostrar_titulo()
+                    newbattle, status = myJuego.cargar_juego()
+
+                    if status == "atras":
+                        continue
+                    else:
                         newbattle.comenzarpelea(myJuego.mostrar_titulo)
+
                 elif opcion == 3:
                     print("\nEspero te hayas divertido.")
                 else:

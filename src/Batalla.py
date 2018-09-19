@@ -212,6 +212,6 @@ if __name__ == '__main__':
     #with open('.//savedgames//data.save', 'wb') as output:
     #    pickle.dump(b, output, pickle.HIGHEST_PROTOCOL)
 
-    with open('.//savedgames//data.save', 'rb') as load:
-        b2 = pickle.load(load)
-        print(b2)
+    #with open('.//savedgames//data.save', 'rb') as load:
+    #    b2 = pickle.load(load)
+    #    print(b2)
