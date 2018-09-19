@@ -19,7 +19,7 @@ class Monstruo:
             printelem += str(x) + ","
         printelem += "]"
 
-        return "\tMonstruo = [" + self.nombre + "] vida [" + str(self.vida) + "] - elementos " + printelem
+        return "\tMonstruo = [" + self.nombre + "] at_esp_usados [" + str(self.cant_esp_att) + "/" + str(self.max_cant_esp_att) + "] vida [" + str(self.vida) + "] - elementos " + printelem
         # return self.nombre + ";" + str(self.vida) + ";" + printelem
 
     def recibir_ataque(self, t_ataque, t_elem_ataque):

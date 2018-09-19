@@ -5,11 +5,6 @@ from Elemento import Elemento
 from Elemento import tipo_ataque
 from Monstruo import Monstruo
 from JuegoExcepciones import JuegoSalirException
-# Variables para iniciar-restaurar una batalla.
-
-# Monstruo 1 [nombre, vida, elementos, cantAtaquesEsp, turno] 
-# Monstruo 2 [nombre, vida, elementos, cantAtaquesEsp, turno]
-
 
 class Batalla:
     def __init__(self):
@@ -99,7 +94,7 @@ class Batalla:
                     print("\t\t[" + str(idx_op) + "] NORMAL tipo " + str(elem))
                     idx_op += 1
 
-                if jugador.cant_esp_att < 4:
+                if jugador.cant_esp_att < jugador.max_cant_esp_att:
                     for elem in jugador.elementos:
                         print("\t\t[" + str(idx_op) + "] ESPECIAL tipo " + str(elem))
                         idx_op += 1
@@ -122,8 +117,14 @@ class Batalla:
         elif idxopelegida == 2:
             return tipo_ataque.NORMAL, jugador.elementos[1]
         elif idxopelegida == 3:
+            if jugador.cant_esp_att >= jugador.max_cant_esp_att:
+                raise ValueError("error al elegir ataque, restauro")
+            jugador.cant_esp_att = jugador.cant_esp_att + 1
             return tipo_ataque.ESPECIAL, jugador.elementos[0]
         elif idxopelegida == 4:
+            if jugador.cant_esp_att >= jugador.max_cant_esp_att:
+                raise ValueError("error al elegir ataque, restauro")
+            jugador.cant_esp_att = jugador.cant_esp_att + 1
             return tipo_ataque.ESPECIAL, jugador.elementos[1]
         elif idxopelegida == 5:
             try:

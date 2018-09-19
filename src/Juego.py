@@ -113,8 +113,8 @@ if __name__ == '__main__':
                     input("\t\tPresionar una tecla para continuar...")
 
             except ValueError:
-                print("\noooooo.\n")
-                input("....")
+                print("\t\t\nAlgun error sucedió.\n")
+                input("\t\tPresione una tecla para continuar...")
 
     except Exception as ex:
         print(ex)
