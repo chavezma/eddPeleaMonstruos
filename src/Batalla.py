@@ -5,6 +5,7 @@ from Elemento import Elemento
 from Elemento import tipo_ataque
 from Monstruo import Monstruo
 from JuegoExcepciones import JuegoSalirException
+from JuegoExcepciones import JuegoGuardadoException
 
 class Batalla:
     def __init__(self):
@@ -77,8 +78,8 @@ class Batalla:
             with open('.//savedgames//' + archivo + ".save", 'wb') as output:
                 pickle.dump(self, output, pickle.HIGHEST_PROTOCOL)
 
-        print("archivo guardado con exito.")
-        input("Presione cualquier tecla para continuar...")
+        print("\n\t\tarchivo guardado con exito.")
+        input("\t\tPresione cualquier tecla para continuar...")
 
     def elegir_ataque(self, jugador):
 
@@ -129,7 +130,7 @@ class Batalla:
         elif idxopelegida == 5:
             try:
                 self.guardar_batalla()
-                raise ValueError("Como eligio guardar, restauro")
+                raise JuegoGuardadoException("Como eligio guardar, restauro")
             except ValueError:
                 raise ValueError("Hubo un error al guardar, restauro")
         elif idxopelegida == 6:
@@ -156,11 +157,15 @@ class Batalla:
 
             self.mostrar_turno()
 
+            restart = 0
             try:
                 ataque_elegido, tipo_elemento_ataque = self.elegir_ataque(ataca)
             except ValueError:
                 print("\n\t\tLa opcion elegida no es valida.\n")
                 input("\t\tPresionar una tecla para continuar...")
+                restart = 1
+                continue
+            except JuegoGuardadoException:
                 restart = 1
                 continue
             except JuegoSalirException:
