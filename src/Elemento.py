@@ -1,3 +1,4 @@
+import os
 from enum import Enum
 
 class tipo_ataque(Enum):
@@ -99,11 +100,14 @@ class Elemento(Enum):
 #	# eturn matrizBonificaciones[fila][columna]
 #	pass
 
+
 if __name__ == '__main__':
-	el = Elemento(1)
+	filelists = []
 
-	print(el)
+	for files in os.walk(".\\savedgames"):
+		for filename in files:
+			for file in filename:
+				if file.endswith(".save"):
+					filelists.append(file)
 
-	if el == Elemento.AIRE:
-		print("es aire")
-
+	print(filelists)

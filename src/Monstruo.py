@@ -38,19 +38,20 @@ class Monstruo:
             danio_base = 10
         elif t_ataque == tipo_ataque.ESPECIAL:
             danio_base = 15
-            for mi_elem in self.elementos:
-                debilidades.append( Elemento(1).tiene_plus_ataque(mi_elem) )
 
-            #print(debilidades)
-            if t_elem_ataque in debilidades:
-                plus_ataque = danio_base*0.2
+        for mi_elem in self.elementos:
+            debilidades.append( Elemento(1).tiene_plus_ataque(mi_elem) )
 
-            for mi_elem in self.elementos:
-                fortalezas.append( Elemento(1).tiene_plus_defensa(mi_elem) )
+        #print(debilidades)
+        if t_elem_ataque in debilidades:
+            plus_ataque = danio_base*0.2
 
-            #print(fortalezas)
-            if t_elem_ataque in fortalezas:
-                plus_defensa = danio_base*0.2
+        for mi_elem in self.elementos:
+            fortalezas.append( Elemento(1).tiene_plus_defensa(mi_elem) )
+
+        #print(fortalezas)
+        if t_elem_ataque in fortalezas:
+            plus_defensa = danio_base*0.2
 
         danio_total = danio_base + plus_ataque - plus_defensa
 

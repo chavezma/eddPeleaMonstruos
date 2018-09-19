@@ -1,14 +1,17 @@
+import pickle
+import os
 from Elemento import Turno
 from Elemento import Elemento
 from Elemento import tipo_ataque
 from Monstruo import Monstruo
+from JuegoExcepciones import JuegoSalirException
 # Variables para iniciar-restaurar una batalla.
 
 # Monstruo 1 [nombre, vida, elementos, cantAtaquesEsp, turno] 
 # Monstruo 2 [nombre, vida, elementos, cantAtaquesEsp, turno]
 
 
-class Battle:
+class Batalla:
     def __init__(self):
         self.jugadores = []
         self.turno = Turno.Jugador1
@@ -27,7 +30,11 @@ class Battle:
         print("\t\t[4] FUEGO.")
 
     def __repr__(self):
-        return "Batalla Turno = [" + str(self.turno) + "]"
+        monstruos = ""
+        for m in self.jugadores:
+            monstruos += str(m) + "\n"
+        monstruos += "\tBatalla Turno = [" + str(self.turno) + "]"
+        return monstruos
 
     def mostrar_turno(self):
         print("\t****  Es el turno de [" + str(self.turno) + "] ****")
@@ -60,7 +67,23 @@ class Battle:
         for jugador in self.jugadores:
             print(jugador)
 
-        input("...")
+        input("\t\tPresionar cualquier tecla para continuar...")
+
+    def guardar_batalla(self):
+        archivo = ""
+
+        archivo = input("\n\t\tElija un nombre (sin extension) para el archivo")
+
+        exists = os.path.isfile('.//savedgames//' + archivo)
+        if exists:
+            print("El archivo ya existe, utilice otro nombre.")
+            raise ValueError
+        else:
+            with open('.//savedgames//' + archivo, 'wb') as output:
+                pickle.dump(self, output, pickle.HIGHEST_PROTOCOL)
+
+        print("archivo guardado con exito.")
+        input("Presione cualquier tecla para continuar...")
 
     def elegir_ataque(self, jugador):
 
@@ -70,23 +93,29 @@ class Battle:
 
         while op_ok == "NO":
             idx_op = 1
-            print("\t\tElija el tipo de ataque que desea utilizar")
-            for elem in jugador.elementos:
-                print("\t\t[" + str(idx_op) + "] NORMAL tipo " + str(elem))
-                idx_op += 1
-
-            if jugador.cant_esp_att < 4:
+            try:
+                print("\t\tElija el tipo de ataque que desea utilizar")
                 for elem in jugador.elementos:
-                    print("\t\t[" + str(idx_op) + "] ESPECIAL tipo " + str(elem))
+                    print("\t\t[" + str(idx_op) + "] NORMAL tipo " + str(elem))
                     idx_op += 1
 
-            print("\t\t[5] Guardar.")
-            print("\t\t[6] Salir.")
+                if jugador.cant_esp_att < 4:
+                    for elem in jugador.elementos:
+                        print("\t\t[" + str(idx_op) + "] ESPECIAL tipo " + str(elem))
+                        idx_op += 1
 
-            idxopelegida = int(input("\t\tElegir opcion: "))
+                print("\t\t[5] Guardar.")
+                print("\t\t[6] Salir.")
 
-            if idxopelegida in lista_op_validas:
-                op_ok = "SI"
+                idxopelegida = int(input("\t\tElegir opcion: "))
+
+                if idxopelegida in lista_op_validas:
+                    op_ok = "SI"
+                else:
+                    raise ValueError("error al elegir ataque, restauro")
+
+            except ValueError:
+                raise ValueError("error al elegir ataque, restauro")
 
         if idxopelegida == 1:
             return tipo_ataque.NORMAL, jugador.elementos[0]
@@ -96,25 +125,47 @@ class Battle:
             return tipo_ataque.ESPECIAL, jugador.elementos[0]
         elif idxopelegida == 4:
             return tipo_ataque.ESPECIAL, jugador.elementos[1]
+        elif idxopelegida == 5:
+            try:
+                self.guardar_batalla()
+                raise ValueError("Como eligio guardar, restauro")
+            except ValueError:
+                raise ValueError("Hubo un error al guardar, restauro")
+        elif idxopelegida == 6:
+            raise JuegoSalirException
 
     def comenzarpelea(self, mostrar_titulo):
         ataque_elegido = 0
         tipo_elemento_ataque = 0
         danio_total = 0
         calculo = ""
+        restart = 0
 
         salir = "no"
         while salir == "no":
             mostrar_titulo()
-            if self.turno == Turno.Jugador1:
-                ataca = self.jugadores[Turno.Jugador1.value]
-                defiende = self.jugadores[Turno.Jugador2.value]
-            else:
-                ataca = self.jugadores[Turno.Jugador2.value]
-                defiende = self.jugadores[Turno.Jugador1.value]
+
+            if restart == 0:
+                if self.turno == Turno.Jugador1:
+                    ataca = self.jugadores[Turno.Jugador1.value]
+                    defiende = self.jugadores[Turno.Jugador2.value]
+                else:
+                    ataca = self.jugadores[Turno.Jugador2.value]
+                    defiende = self.jugadores[Turno.Jugador1.value]
 
             self.mostrar_turno()
-            ataque_elegido, tipo_elemento_ataque = self.elegir_ataque(ataca)
+
+            try:
+                ataque_elegido, tipo_elemento_ataque = self.elegir_ataque(ataca)
+            except ValueError:
+                print("\n\t\tLa opcion elegida no es valida.\n")
+                input("\t\tPresionar una tecla para continuar...")
+                restart = 1
+                continue
+            except JuegoSalirException:
+                salir = "si"
+                continue
+
             danio_total, calculo = defiende.recibir_ataque(ataque_elegido, tipo_elemento_ataque)
 
             print("\n\t\tDanio calculado por Jugador " + str(defiende.id_jugador) + "")
@@ -137,28 +188,30 @@ class Battle:
 
             input("\n\t\tpresioanr cualquier tecla para continuar...")
 
-    def cargarjuego(self):
-        pass
-
 
 if __name__ == '__main__':
-    b = Battle()
-
+    b = Batalla()
+    b2 = Batalla()
     elementos1 = [Elemento.AIRE, Elemento.TIERRA]
     nombre1 = "suri"
 
     elementos2 = [Elemento.AIRE, Elemento.AGUA]
     nombre2 = "pini"
 
-    m1 = Monstruo(nombre1, elementos1)
-    m2 = Monstruo(nombre2, elementos2)
+    m1 = Monstruo(1, nombre1, elementos1)
+    m2 = Monstruo(2, nombre2, elementos2)
+
+    m1.vida = 80
+    m2.vida = 70
 
     b.jugadores.append(m1)
     b.jugadores.append(m2)
 
     b.turno = Turno.Jugador1
 
-    b.comenzarpelea()
+    #with open('.//savedgames//data.save', 'wb') as output:
+    #    pickle.dump(b, output, pickle.HIGHEST_PROTOCOL)
 
-
-
+    with open('.//savedgames//data.save', 'rb') as load:
+        b2 = pickle.load(load)
+        print(b2)
