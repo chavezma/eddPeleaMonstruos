@@ -74,12 +74,12 @@ class Batalla:
 
         archivo = input("\n\t\tElija un nombre (sin extension) para el archivo")
 
-        exists = os.path.isfile('.//savedgames//' + archivo)
+        exists = os.path.isfile('.//savedgames//' + archivo + ".save")
         if exists:
             print("El archivo ya existe, utilice otro nombre.")
             raise ValueError
         else:
-            with open('.//savedgames//' + archivo, 'wb') as output:
+            with open('.//savedgames//' + archivo + ".save", 'wb') as output:
                 pickle.dump(self, output, pickle.HIGHEST_PROTOCOL)
 
         print("archivo guardado con exito.")
