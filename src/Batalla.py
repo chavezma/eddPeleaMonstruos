@@ -4,26 +4,15 @@ from Elemento import Turno
 from Elemento import Elemento
 from Elemento import tipo_ataque
 from Monstruo import Monstruo
-from JuegoExcepciones import JuegoSalirException
+from JuegoExcepciones import JuegoMenuPrincipalException
 from JuegoExcepciones import JuegoGuardadoException
+from JuegoExcepciones import JuegoGuardarException
 
 class Batalla:
     def __init__(self):
         self.jugadores = []
         self.turno = Turno.Jugador1
         self.jugador = 1
-
-    def print_elementos(self, nro_elemento):
-        if nro_elemento == 1:
-            elem = "primer"
-        else:
-            elem = "segundo"
-
-        print("\t\tElija su " + elem + " elemento")
-        print("\t\t[1] AIRE.")
-        print("\t\t[2] TIERRA.")
-        print("\t\t[3] AGUA.")
-        print("\t\t[4] FUEGO.")
 
     def __repr__(self):
         monstruos = ""
@@ -36,58 +25,12 @@ class Batalla:
         print("\t****  Es el turno de [" + str(self.turno) + "] ****")
         print("\t**********************************************")
 
-    def crear_monstruo(self, idx_jugador):
-        elemento = []
-        nombre = ""
-        ups = Elemento(1)
-
-        nombre = str(input("\tIngrese su nombre:"))
-
-        for idx_elemento in range(1, 3):
-            self.print_elementos(idx_elemento)
-            choose = int(input("\tOpcion:"))
-            #print("\tEleccion realizada [" + str(choose) + "].")
-            #input("\tpresionar algo....")
-            elemento.append(Elemento(choose))
-
-        return Monstruo(idx_jugador, nombre, elemento)
-
-    def config_jugadores(self, mostrar_titulo):
-        idx_jugador = 0
-
-        for idx_jugador in range(1, 3):
-            mostrar_titulo()
-            print("\n\t****  Cargando informacion del jugador " + str(idx_jugador) + " ****")
-            self.jugadores.append(self.crear_monstruo(idx_jugador))
-
-        for jugador in self.jugadores:
-            print(jugador)
-
-        input("\t\tPresionar cualquier tecla para continuar...")
-
-    def guardar_batalla(self):
-        archivo = ""
-
-        archivo = input("\n\t\tElija un nombre (sin extension) para el archivo")
-
-        exists = os.path.isfile('.//savedgames//' + archivo + ".save")
-        if exists:
-            print("El archivo ya existe, utilice otro nombre.")
-            raise ValueError
-        else:
-            with open('.//savedgames//' + archivo + ".save", 'wb') as output:
-                pickle.dump(self, output, pickle.HIGHEST_PROTOCOL)
-
-        print("\n\t\tarchivo guardado con exito.")
-        input("\t\tPresione cualquier tecla para continuar...")
-
     def elegir_ataque(self, jugador):
-
         lista_op_validas = [1, 2, 3, 4, 5, 6]
         idxopelegida = 0
         op_ok = "NO"
 
-        while op_ok == "NO":
+        while idxopelegida not in  lista_op_validas:
             idx_op = 1
             try:
                 print("\t\tElija el tipo de ataque que desea utilizar")
@@ -101,14 +44,9 @@ class Batalla:
                         idx_op += 1
 
                 print("\t\t[5] Guardar.")
-                print("\t\t[6] Salir.")
+                print("\t\t[6] Menu Principal.")
 
                 idxopelegida = int(input("\t\tElegir opcion: "))
-
-                if idxopelegida in lista_op_validas:
-                    op_ok = "SI"
-                else:
-                    raise ValueError("error al elegir ataque, restauro")
 
             except ValueError:
                 raise ValueError("error al elegir ataque, restauro")
@@ -128,71 +66,60 @@ class Batalla:
             jugador.cant_esp_att = jugador.cant_esp_att + 1
             return tipo_ataque.ESPECIAL, jugador.elementos[1]
         elif idxopelegida == 5:
-            try:
-                self.guardar_batalla()
-                raise JuegoGuardadoException("Como eligio guardar, restauro")
-            except ValueError:
-                raise ValueError("Hubo un error al guardar, restauro")
+            raise JuegoGuardarException
         elif idxopelegida == 6:
-            raise JuegoSalirException
+            raise JuegoMenuPrincipalException
 
-    def comenzarpelea(self, mostrar_titulo):
+    def pelear(self):
         ataque_elegido = 0
         tipo_elemento_ataque = 0
         danio_total = 0
         calculo = ""
         restart = 0
 
-        salir = "no"
-        while salir == "no":
-            mostrar_titulo()
+        if self.turno == Turno.Jugador1:
+            ataca = self.jugadores[Turno.Jugador1.value]
+            defiende = self.jugadores[Turno.Jugador2.value]
+        else:
+            ataca = self.jugadores[Turno.Jugador2.value]
+            defiende = self.jugadores[Turno.Jugador1.value]
 
-            if restart == 0:
-                if self.turno == Turno.Jugador1:
-                    ataca = self.jugadores[Turno.Jugador1.value]
-                    defiende = self.jugadores[Turno.Jugador2.value]
-                else:
-                    ataca = self.jugadores[Turno.Jugador2.value]
-                    defiende = self.jugadores[Turno.Jugador1.value]
+        self.mostrar_turno()
 
-            self.mostrar_turno()
+        try:
+            ataque_elegido, tipo_elemento_ataque = self.elegir_ataque(ataca)
+        except ValueError:
+            print("\n\t\tLa opcion elegida no es valida.\n")
+            input("\t\tPresionar una tecla para continuar...")
+            return "continue"
+        except JuegoGuardarException:
+            return "guardar"
+        except JuegoMenuPrincipalException:
+            return "menu"
 
-            restart = 0
-            try:
-                ataque_elegido, tipo_elemento_ataque = self.elegir_ataque(ataca)
-            except ValueError:
-                print("\n\t\tLa opcion elegida no es valida.\n")
-                input("\t\tPresionar una tecla para continuar...")
-                restart = 1
-                continue
-            except JuegoGuardadoException:
-                restart = 1
-                continue
-            except JuegoSalirException:
-                salir = "si"
-                continue
+        danio_total, calculo = defiende.recibir_ataque(ataque_elegido, tipo_elemento_ataque)
 
-            danio_total, calculo = defiende.recibir_ataque(ataque_elegido, tipo_elemento_ataque)
+        print("\n\t\tDanio calculado por Jugador " + str(defiende.id_jugador) + "")
+        print("\t\t[Danio Total = Danio Base + Plus Ataque - Plus Defensa]")
+        print("\t\t" + calculo)
+        print("\t\tPunto de vida: [" + str(defiende.vida) + "]")
+        input("")
 
-            print("\n\t\tDanio calculado por Jugador " + str(defiende.id_jugador) + "")
-            print("\t\t[Danio Total = Danio Base + Plus Ataque - Plus Defensa]")
-            print("\t\t" + calculo)
-            print("\t\tPunto de vida: [" + str(defiende.vida) + "]")
-
-            if self.turno == Turno.Jugador2:
-                print("\n\t\tResumen de la ronda...")
-                for jugador in self.jugadores:
-                    print("\t" + str(jugador))
-
-            self.turno = Turno((self.turno.value + 1) % 2)
-
+        if self.turno == Turno.Jugador2:
+            print("\n\t\tResumen de la ronda...")
             for jugador in self.jugadores:
-                if jugador.vida == 0:
-                    salir = "si"
-                    print("\n\t\tEl juego ha finalizado...")
-                    input("")
+                print("\t" + str(jugador))
 
-            input("\n\t\tpresioanr cualquier tecla para continuar...")
+        self.turno = Turno((self.turno.value + 1) % 2)
+
+        for jugador in self.jugadores:
+            if jugador.vida == 0:
+                salir = "si"
+                print("\n\t\tEl juego ha finalizado...")
+                input("")
+
+        input("\n\t\tpresioanr cualquier tecla para continuar...")
+        return "continuar"
 
 
 if __name__ == '__main__':
