@@ -8,13 +8,15 @@ from JuegoExcepciones import JuegoMenuPrincipalException
 from JuegoExcepciones import JuegoGuardadoException
 from JuegoExcepciones import JuegoGuardarException
 
+
 class Batalla:
+
     def __init__(self):
         self.jugadores = []
         self.turno = Turno.Jugador1
         self.jugador = 1
 
-    def __repr__(self):
+    def __str__(self):
         monstruos = ""
         for m in self.jugadores:
             monstruos += str(m) + "\n"

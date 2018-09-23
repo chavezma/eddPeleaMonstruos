@@ -8,6 +8,9 @@ from JuegoExcepciones import JuegoGuardarException
 from JuegoExcepciones import JuegoCrearMonstruoException
 
 class Juego:
+    batalla = Batall()
+    estado = ""
+
     def __init__(self):
         self.batalla = Batalla()
         self.estado = "activo"

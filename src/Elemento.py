@@ -1,113 +1,50 @@
-import os
 from enum import Enum
 
-class tipo_ataque(Enum):
-	NORMAL = 1
-	ESPECIAL = 2
 
-	def get_ataque(self, idx):
-		"""Dispatch method"""
-		method_name = 'ataque_' + str(idx)
-		# Get the method from 'self'. Default to a lambda.
-		method = getattr(self, method_name, lambda: "Ataque invalido")
-		# Call the method as we return it
-		return method()
-
-	def ataque_1(self):
-		return tipo_ataque.NORMAL
-
-	def ataque_2(self):
-		return tipo_ataque.ESPECIAL
+class TipoAtaque(Enum):
+    NORMAL = 10
+    ESPECIAL = 15
 
 
 class Turno(Enum):
-	Jugador1 = 0
-	Jugador2 = 1
+    Jugador1 = 0
+    Jugador2 = 1
 
 
 class Elemento(Enum):
-	AIRE = 1
-	TIERRA = 2
-	AGUA = 3
-	FUEGO = 4
+    NONE = (0, "NADA")
+    AIRE = (1, "AIRE")
+    TIERRA = (2, "TIERRA")
+    AGUA = (3, "AGUA")
+    FUEGO = (4, "FUEGO")
 
-	def get_elemento(self, idx):
-		"""Dispatch method"""
-		method_name = 'elemento_' + str(idx)
-		# Get the method from 'self'. Default to a lambda.
-		method = getattr(self, method_name, lambda: "Elemento invalido")
-		# Call the method as we return it
-		return method()
+    def __str__(self):
+        return self.value[1]
 
-	def elemento_1(self):
-		return Elemento.AIRE
+    def tiene_plus_ataque(self, elem):
+        # Quien tiene plus de ataque contra param
+        # AGUA --> AIRE --> TIERRA --> FUEGO --> AGUA
+        if elem == Elemento.AGUA:
+            return Elemento.AIRE
+        elif elem == Elemento.AIRE:
+            return Elemento.TIERRA
+        elif elem == Elemento.TIERRA:
+            return Elemento.FUEGO
+        if elem == Elemento.FUEGO:
+            return Elemento.AGUA
 
-	def elemento_2(self):
-		return Elemento.TIERRA
-
-	def elemento_3(self):
-		return Elemento.AGUA
-
-	def elemento_4(self):
-		return Elemento.FUEGO
-
-	def get_elemento_desc(self, idx):
-		"""Dispatch method"""
-		method_name = 'elemento_' + str(idx)
-		# Get the method from 'self'. Default to a lambda.
-		method = getattr(self, method_name, lambda: "Elemento invalido")
-		# Call the method as we return it
-		return method()
-
-	def elemento_1(self):
-		return "AIRE"
-
-	def elemento_2(self):
-		return "TIERRA"
-
-	def elemento_3(self):
-		return "AGUA"
-
-	def elemento_4(self):
-		return "FUEGO"
-
-	def tiene_plus_ataque(self, elemento):
-		# Quien tiene plus de ataque contra param
-		# AGUA --> AIRE --> TIERRA --> FUEGO --> AGUA
-		if elemento == Elemento.AGUA:
-			return Elemento.AIRE
-		elif elemento == Elemento.AIRE:
-			return Elemento.TIERRA
-		elif elemento == Elemento.TIERRA:
-			return Elemento.FUEGO
-		if elemento == Elemento.FUEGO:
-			return Elemento.AGUA
-
-	def tiene_plus_defensa(self, elemento):
-		# AGUA --> TIERRA --> AIRE --> FUEGO --> AGUA
-		if elemento == Elemento.AGUA:
-			return Elemento.TIERRA
-		elif elemento == Elemento.TIERRA:
-			return Elemento.AIRE
-		if elemento == Elemento.AIRE:
-			return Elemento.FUEGO
-		elif elemento == Elemento.FUEGO:
-			return Elemento.AGUA
-
-# matrizBonificaciones = [[1, 0.8, 1.2, 1], [1.2, 1, 0.8, 1], [1, 0.8, 1, 1.2], [0.8, 1.2, 1, 1]]
-
-# def get_bonificacion_ataque(fila, columna):
-#	# eturn matrizBonificaciones[fila][columna]
-#	pass
+    def tiene_plus_defensa(self, elem):
+        # AGUA --> TIERRA --> AIRE --> FUEGO --> AGUA
+        if elem == Elemento.AGUA:
+            return Elemento.TIERRA
+        elif elem == Elemento.TIERRA:
+            return Elemento.AIRE
+        if elem == Elemento.AIRE:
+            return Elemento.FUEGO
+        elif elem == Elemento.FUEGO:
+            return Elemento.AGUA
 
 
 if __name__ == '__main__':
-	filelists = []
-
-	for files in os.walk(".\\savedgames"):
-		for filename in files:
-			for file in filename:
-				if file.endswith(".save"):
-					filelists.append(file)
-
-	print(filelists)
+    el = Elemento(Elemento.AGUA)
+    print(el)
