@@ -1,6 +1,7 @@
 import os
 import sys
 import pickle
+from Consola import Consola
 from Batalla import Batalla
 from Monstruo import Monstruo
 from Elemento import Elemento
@@ -8,63 +9,31 @@ from JuegoExcepciones import JuegoGuardarException
 from JuegoExcepciones import JuegoCrearMonstruoException
 
 class Juego:
-    batalla = Batall()
+    batalla = Batalla()
     estado = ""
 
     def __init__(self):
+        self.menu = Consola()
         self.batalla = Batalla()
         self.estado = "activo"
 
-    def menu_principal(self):
-        self.juego_titulo()
-        return self.juego_menu()
-
-
-    def juego_titulo(self):
-        os.system('cls' if os.name == 'nt' else 'clear')
-
-        print("\t**********************************************")
-        print("\t***********  Batalla de monstruos  ***********")
-        print("\t**********************************************")
-        return
-
-    def juego_menu(self):
-        idxopcion = 0
-        opcorrectas = [1,2,3,4]
-        lstmenu = ["nuevo", "continuar", "cargar", "salir"]
-        print("\n")
-        print("\t[1] Nuevo Juego.")
-        print("\t[2] Continuar.")
-        print("\t[3] Cargar.")
-        print("\t[4] Salir.")
-
-        while idxopcion not in opcorrectas:
-            try:
-                idxopcion = int(input("\n\tElegir una opción: "))
-            except ValueError:
-                idxopcion = 0
-
-        return lstmenu[idxopcion-1]
-
     def juegos_guardados(self):
-        lstjuegos = []
-        total_juegos = 0
+        dict_juegos_guardados = dict()
+
+        total_juegos = 1
         # Buscar el archivo batalla.save para dar a elegir que juego jugar.
         for files in os.walk(".\\savedgames"):
             for filename in files:
                 for file in filename:
                     if file.endswith(".save"):
-                        lstjuegos.append(file)
+                        dict_juegos_guardados[total_juegos] = file
+                        total_juegos = total_juegos + 1
 
-        total_juegos = len(lstjuegos)
-        idx = 1
-        print("\nEstos son los juegos guardados.\n")
-        for juego in lstjuegos:
-            print("\t[" + str(idx) + "] " + juego)
-            idx = idx + 1
-        print("\t[0] Atras")
+        dict_juegos_guardados[total_juegos] = "Atras"
 
-        return lstjuegos
+        opcin = self.menu.pedir_opcion(dict_juegos_guardados)
+
+        return opcin
 
     def guardar_juego(self):
         archivo = ""
@@ -73,7 +42,7 @@ class Juego:
         exists = os.path.isfile('.//savedgames//' + archivo + ".save")
         if exists:
             print("El archivo ya existe, utilice otro nombre.")
-            raise ValueError
+            raise JuegoGuardadoExisteException
         else:
             with open('.//savedgames//' + archivo + ".save", 'wb') as output:
                 pickle.dump(self, output, pickle.HIGHEST_PROTOCOL)
@@ -111,10 +80,7 @@ class Juego:
             elem = "segundo"
 
         print("\t\tElija su " + elem + " elemento")
-        print("\t\t[1] AIRE.")
-        print("\t\t[2] TIERRA.")
-        print("\t\t[3] AGUA.")
-        print("\t\t[4] FUEGO.")
+
 
     def crear_monstruo(self):
         id_jugador = len(self.batalla.jugadores) + 1
@@ -151,7 +117,7 @@ if __name__ == '__main__':
         while myJuego.estado == "activo":
             if opcion == "menu":
                 opcion = myJuego.menu_principal()
-            elif opcion == "nuevo":
+            elif opcion == "Nuevo Juego":
                 try:
                     while len(myJuego.batalla.jugadores) < 2:
                         myJuego.batalla.jugadores.append(myJuego.crear_monstruo())
@@ -159,11 +125,15 @@ if __name__ == '__main__':
                     opcion = "nuevo"
                     continue
 
-                opcion = "continuar"
+                opcion = "Continuar"
 
-            elif opcion == "guardar":
-                myJuego.guardar_juego()
-                opcion = "continuar"
+            elif opcion == "Guardar":
+                try:
+                    myJuego.guardar_juego()
+                    opcion = "continuar"
+                except JuegoGuardadoExisteException:
+                    opcion = "guardar"
+                    continue
             elif opcion == "cargar":
                 myJuego.juego_titulo()
                 try:

@@ -5,6 +5,9 @@ class JuegoMenuPrincipalException(Exception):
 class JuegoGuardadoException(Exception):
     pass
 
+class JuegoGuardadoExisteException(Exception):
+    pass
+
 class JuegoOpcionInvalidaException(Exception):
     pass
 
@@ -12,4 +15,7 @@ class JuegoGuardarException(Exception):
     pass
 
 class JuegoCrearMonstruoException(Exception):
+    pass
+
+class JuegoFinalizadoException(Exception):
     pass

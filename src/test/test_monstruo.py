@@ -77,20 +77,140 @@ class TestMonstruo(unittest.TestCase):
         self.myMonstruo.actulizar_vida(danio4)
         self.assertEqual(self.myMonstruo.vida, 0, "error al actualizar vida tras danio4")
 
-    # Tienen plus de ataque contra mi      # Tienen plus de ataque contra mi
-    # por ser FUEGO soy debil contra AGUA  # por ser FUEGO soy debil contra AGUA
-    # por ser AGUA soy debil contra AIRE   # por ser AGUA soy debil contra AIRE
-    def test_recibir_danio_normal_agua(self):
+    def test_recibir_danio_normal_sin_bonus(self):
+        # Solo el danio total y la vida, el resto ya se valido con los casos anteriores
         t_at = TipoAtaque.NORMAL
-        t_elem_at = Elemento.AGUA
+        t_elem_at = Elemento.TIERRA
 
-        danio_total
-        danio_base
-        plus_ataque
-        plus_defensa
+        # <Elemento> tiene plus de ataque <Elemento>       # <Elemento> tiene plus de defensa contra <Elemento>
+        # AIRE --> AGUA                                    # AIRE --> FUEGO
+        # TIERRA --> AIRE                                  # TIERRA --> AIRE
+        # AGUA --> FUEGO                                   # AGUA --> TIERRA
+        # FUEGO --> TIERRA                                 # FUEGO --> AGUA
 
-        self.myMonstruo.recibir_ataque(t_at, t_elem_at)
+        mTierra = Monstruo(2, "Tierra", [Elemento.TIERRA, Elemento.TIERRA])
+        mFuego = Monstruo(2, "Fuego", [Elemento.FUEGO, Elemento.FUEGO])
+
+        # return danio_total, danio_base, plus_ataque, plus_defensa
+        danio_total, danio_base, plus_ataque, plus_defensa = mTierra.recibir_ataque(t_at, t_elem_at)
+        self.assertEqual(danio_total, 10)
+        self.assertEqual(plus_ataque, 0)
+        self.assertEqual(plus_defensa, 0)
+        self.assertEqual(mTierra.vida, 90)
+
+        danio_total, danio_base, plus_ataque, plus_defensa = mFuego.recibir_ataque(t_at, t_elem_at)
+        self.assertEqual(danio_total, 10)
+        self.assertEqual(plus_ataque, 0)
+        self.assertEqual(plus_defensa, 0)
+        self.assertEqual(mFuego.vida, 90)
+
+    def test_recibir_danio_normal_sin_bonus_compensado(self):
+        # Solo el danio total y la vida, el resto ya se valido con los casos anteriores
+        t_at = TipoAtaque.NORMAL
+        t_elem_at = Elemento.TIERRA
+
+        # <Elemento> tiene plus de ataque <Elemento>       # <Elemento> tiene plus de defensa contra <Elemento>
+        # AIRE --> AGUA                                    # AIRE --> FUEGO
+        # TIERRA --> AIRE                                  # TIERRA --> AIRE
+        # AGUA --> FUEGO                                   # AGUA --> TIERRA
+        # FUEGO --> TIERRA                                 # FUEGO --> AGUA
+
+        mAireAgua = Monstruo(2, "AireAgua", [Elemento.AIRE, Elemento.AGUA])
+
+        # return danio_total, danio_base, plus_ataque, plus_defensa
+        danio_total, danio_base, plus_ataque, plus_defensa = mAireAgua.recibir_ataque(t_at, t_elem_at)
+        self.assertEqual(danio_total, 10)
+        self.assertEqual(plus_ataque, 2)
+        self.assertEqual(plus_defensa, 2)
+        self.assertEqual(mAireAgua.vida, 90)
+
+    def test_recibir_danio_especial_sin_bonus(self):
+        # Solo el danio total y la vida, el resto ya se valido con los casos anteriores
+        t_at = TipoAtaque.ESPECIAL
+        t_elem_at = Elemento.TIERRA
+
+        # <Elemento> tiene plus de ataque <Elemento>       # <Elemento> tiene plus de defensa contra <Elemento>
+        # AIRE --> AGUA                                    # AIRE --> FUEGO
+        # TIERRA --> AIRE                                  # TIERRA --> AIRE
+        # AGUA --> FUEGO                                   # AGUA --> TIERRA
+        # FUEGO --> TIERRA                                 # FUEGO --> AGUA
+
+        mTierra = Monstruo(2, "Tierra", [Elemento.TIERRA, Elemento.TIERRA])
+        mFuego = Monstruo(2, "Fuego", [Elemento.FUEGO, Elemento.FUEGO])
+
+        # return danio_total, danio_base, plus_ataque, plus_defensa
+        danio_total, danio_base, plus_ataque, plus_defensa = mTierra.recibir_ataque(t_at, t_elem_at)
+        self.assertEqual(danio_total, 15)
+        self.assertEqual(plus_ataque, 0)
+        self.assertEqual(plus_defensa, 0)
+        self.assertEqual(mTierra.vida, 85)
+
+        danio_total, danio_base, plus_ataque, plus_defensa = mFuego.recibir_ataque(t_at, t_elem_at)
+        self.assertEqual(danio_total, 15)
+        self.assertEqual(plus_ataque, 0)
+        self.assertEqual(plus_defensa, 0)
+        self.assertEqual(mFuego.vida, 85)
+
+    def test_recibir_danio_especial_sin_bonus_compensado(self):
+        # Solo el danio total y la vida, el resto ya se valido con los casos anteriores
+        t_at = TipoAtaque.ESPECIAL
+        t_elem_at = Elemento.TIERRA
+
+        # <Elemento> tiene plus de ataque <Elemento>       # <Elemento> tiene plus de defensa contra <Elemento>
+        # AIRE --> AGUA                                    # AIRE --> FUEGO
+        # TIERRA --> AIRE                                  # TIERRA --> AIRE
+        # AGUA --> FUEGO                                   # AGUA --> TIERRA
+        # FUEGO --> TIERRA                                 # FUEGO --> AGUA
+
+        mAireAgua = Monstruo(2, "AireAgua", [Elemento.AIRE, Elemento.AGUA])
+
+        # return danio_total, danio_base, plus_ataque, plus_defensa
+        danio_total, danio_base, plus_ataque, plus_defensa = mAireAgua.recibir_ataque(t_at, t_elem_at)
+        self.assertEqual(danio_total, 15)
+        self.assertEqual(plus_ataque, 3)
+        self.assertEqual(plus_defensa, 3)
+        self.assertEqual(mAireAgua.vida, 85)
+
+    def test_recibir_danio_ej1_tp(self):
+        # Solo el danio total y la vida, el resto ya se valido con los casos anteriores
+        t_at = TipoAtaque.ESPECIAL
+        t_elem_at = Elemento.FUEGO
+
+        # <Elemento> tiene plus de ataque <Elemento>       # <Elemento> tiene plus de defensa contra <Elemento>
+        # AIRE --> AGUA                                    # AIRE --> FUEGO
+        # TIERRA --> AIRE                                  # TIERRA --> AIRE
+        # AGUA --> FUEGO                                   # AGUA --> TIERRA
+        # FUEGO --> TIERRA                                 # FUEGO --> AGUA
+
+        mAireTierra = Monstruo(2, "AireTierra", [Elemento.AIRE, Elemento.TIERRA])
+
+        # return danio_total, danio_base, plus_ataque, plus_defensa
+        danio_total, danio_base, plus_ataque, plus_defensa = mAireTierra.recibir_ataque(t_at, t_elem_at)
+        self.assertEqual(danio_total, 15)
+        self.assertEqual(plus_ataque, 3)
+        self.assertEqual(plus_defensa, 3)
+        self.assertEqual(mAireTierra.vida, 85)
+
+    def test_recibir_danio_ej2_tp(self):
+        # Solo el danio total y la vida, el resto ya se valido con los casos anteriores
+        t_at = TipoAtaque.ESPECIAL
+        t_elem_at = Elemento.AIRE
+
+        # <Elemento> tiene plus de ataque <Elemento>       # <Elemento> tiene plus de defensa contra <Elemento>
+        # AIRE --> AGUA                                    # AIRE --> FUEGO
+        # TIERRA --> AIRE                                  # TIERRA --> AIRE
+        # AGUA --> FUEGO                                   # AGUA --> TIERRA
+        # FUEGO --> TIERRA                                 # FUEGO --> AGUA
+
+        mAguaFuego = Monstruo(2, "AguaFuego", [Elemento.AGUA, Elemento.FUEGO])
+
+        # return danio_total, danio_base, plus_ataque, plus_defensa
+        danio_total, danio_base, plus_ataque, plus_defensa = mAguaFuego.recibir_ataque(t_at, t_elem_at)
+        self.assertEqual(danio_total, 18)
+        self.assertEqual(plus_ataque, 3)
+        self.assertEqual(plus_defensa, 0)
+        self.assertEqual(mAguaFuego.vida, 82)
 
 
-if __name__=="__main__":
+if __name__ == "__main__":
     unittest.main(argv=['first-arg-is-ignored'], verbosity=2, exit=False)

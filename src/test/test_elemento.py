@@ -32,11 +32,12 @@ class TestElemento(unittest.TestCase):
         self.assertEqual(elemFuego.value[0], 4, "error al crear elemento FUEGO")
         self.assertEqual(elemFuego.value[1], "FUEGO", "error al crear elemento FUEGO")
 
-    # Quien tiene plus de ataque contra cada elemento
-    # AIRE --> TIERRA
-    # TIERRA --> FUEGO
-    # AGUA --> AIRE
-    # FUEGO --> AGUA
+    # <Elemento> tiene plus de ataque <Elemento>       # <Elemento> tiene plus de defensa contra <Elemento>
+    # AIRE --> AGUA                                    # AIRE --> FUEGO
+    # TIERRA --> AIRE                                  # TIERRA --> AIRE
+    # AGUA --> FUEGO                                   # AGUA --> TIERRA
+    # FUEGO --> TIERRA                                 # FUEGO --> AGUA
+
     def test_tiene_plus_ataque_aire(self):
         elemAire = Elemento(Elemento.AIRE)
         self.assertEqual(self.elemGenerico.tiene_plus_ataque(elemAire), Elemento(Elemento.TIERRA), "error al validar plus ataque de AIRE")

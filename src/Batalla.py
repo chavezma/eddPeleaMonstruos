@@ -1,12 +1,8 @@
 import pickle
 import os
-from Elemento import Turno
-from Elemento import Elemento
-from Elemento import tipo_ataque
-from Monstruo import Monstruo
-from JuegoExcepciones import JuegoMenuPrincipalException
-from JuegoExcepciones import JuegoGuardadoException
-from JuegoExcepciones import JuegoGuardarException
+import src.Elemento
+import src.Monstruo
+import src.JuegoExcepciones
 
 
 class Batalla:
@@ -23,35 +19,41 @@ class Batalla:
         monstruos += "\tBatalla Turno = [" + str(self.turno) + "]"
         return monstruos
 
+    def actualizar_turno(self):
+        self.turno = Turno((self.turno.value + 1) % 2)
+
     def mostrar_turno(self):
         print("\t****  Es el turno de [" + str(self.turno) + "] ****")
         print("\t**********************************************")
 
     def elegir_ataque(self, jugador):
-        lista_op_validas = [1, 2, 3, 4, 5, 6]
-        idxopelegida = 0
-        op_ok = "NO"
-
-        while idxopelegida not in  lista_op_validas:
+        try:
+            dict_opciones_ataque = dict()
             idx_op = 1
-            try:
-                print("\t\tElija el tipo de ataque que desea utilizar")
+            print("\t\tElija el tipo de ataque que desea utilizar")
+            for elem in jugador.elementos:
+                opcion = "ESPECIAL tipo " + str(elem)
+                dict_opciones_ataque[idx_op] = tuple(opcion elem)
+                idx_op += 1
+
+            if jugador.cant_esp_att < jugador.max_cant_esp_att:
                 for elem in jugador.elementos:
-                    print("\t\t[" + str(idx_op) + "] NORMAL tipo " + str(elem))
+                    #print("\t\t[" + str(idx_op) + "] ESPECIAL tipo " + str(elem))
+                    dict_opciones_ataque[idx_op] = tuple("ESPECIAL tipo ", elem)
                     idx_op += 1
 
-                if jugador.cant_esp_att < jugador.max_cant_esp_att:
-                    for elem in jugador.elementos:
-                        print("\t\t[" + str(idx_op) + "] ESPECIAL tipo " + str(elem))
-                        idx_op += 1
+            dict_opciones_ataque[idx_op] = tuple("Guardar ", elem)
+            idx_op += 1
 
-                print("\t\t[5] Guardar.")
-                print("\t\t[6] Menu Principal.")
+            dict_opciones_ataque[idx_op] = tuple("ESPECIAL tipo ", elem)
+            idx_op += 1
+            print("\t\t[5] Guardar.")
+            print("\t\t[6] Menu Principal.")
 
-                idxopelegida = int(input("\t\tElegir opcion: "))
+            idxopelegida = int(input("\t\tElegir opcion: "))
 
-            except ValueError:
-                raise ValueError("error al elegir ataque, restauro")
+        except ValueError:
+            raise ValueError("error al elegir ataque, restauro")
 
         if idxopelegida == 1:
             return tipo_ataque.NORMAL, jugador.elementos[0]
@@ -72,53 +74,32 @@ class Batalla:
         elif idxopelegida == 6:
             raise JuegoMenuPrincipalException
 
-    def pelear(self):
+    def resumen_ronda(self):
+        print("\n\t\tResumen de la ronda...")
+        for jugador in self.jugadores:
+            print("\t" + str(jugador))
+
+    def controlar_fin(self):
+        for jugador in self.jugadores:
+            if jugador.vida == 0:
+                raise JuegoFinalizadoException
+
+    def pelear(self, ataque_elegido, tipo_elemento_ataque):
         ataque_elegido = 0
         tipo_elemento_ataque = 0
         danio_total = 0
         calculo = ""
         restart = 0
 
-        if self.turno == Turno.Jugador1:
-            ataca = self.jugadores[Turno.Jugador1.value]
-            defiende = self.jugadores[Turno.Jugador2.value]
-        else:
-            ataca = self.jugadores[Turno.Jugador2.value]
-            defiende = self.jugadores[Turno.Jugador1.value]
-
-        self.mostrar_turno()
-
-        try:
-            ataque_elegido, tipo_elemento_ataque = self.elegir_ataque(ataca)
-        except ValueError:
-            print("\n\t\tLa opcion elegida no es valida.\n")
-            input("\t\tPresionar una tecla para continuar...")
-            return "continue"
-        except JuegoGuardarException:
-            return "guardar"
-        except JuegoMenuPrincipalException:
-            return "menu"
-
-        danio_total, calculo = defiende.recibir_ataque(ataque_elegido, tipo_elemento_ataque)
+        danio_total, danio_base, plus_ataque, plus_defensa = defiende.recibir_ataque(ataque_elegido, tipo_elemento_ataque)
 
         print("\n\t\tDanio calculado por Jugador " + str(defiende.id_jugador) + "")
         print("\t\t[Danio Total = Danio Base + Plus Ataque - Plus Defensa]")
-        print("\t\t" + calculo)
+        print("[ " + str(danio_total) + " = " + str(danio_base) + " + " + str(plus_ataque) + " - " + str(plus_defensa) + "]")
         print("\t\tPunto de vida: [" + str(defiende.vida) + "]")
         input("")
 
-        if self.turno == Turno.Jugador2:
-            print("\n\t\tResumen de la ronda...")
-            for jugador in self.jugadores:
-                print("\t" + str(jugador))
 
-        self.turno = Turno((self.turno.value + 1) % 2)
-
-        for jugador in self.jugadores:
-            if jugador.vida == 0:
-                salir = "si"
-                print("\n\t\tEl juego ha finalizado...")
-                input("")
 
         input("\n\t\tpresioanr cualquier tecla para continuar...")
         return "continuar"
