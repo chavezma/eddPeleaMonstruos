@@ -2,8 +2,6 @@ from Elemento import Elemento
 from Elemento import Turno
 from Elemento import TipoAtaque
 import Monstruo
-import JuegoExcepciones
-
 
 class Batalla:
 
@@ -26,10 +24,11 @@ class Batalla:
     def actualizar_turno(self):
         self.turno = Turno((self.turno.value + 1) % 2)
 
-    def controlar_fin(self):
-        defiende = self.obtener_defensor()
+    def finalizado(self, defiende):
         if defiende.vida == 0:
-            raise JuegoFinalizadoException
+            return True
+        else:
+            return False
 
     def obtener_atacante(self):
         return self.jugadores[self.turno.value]
@@ -52,31 +51,3 @@ class Batalla:
         self.calculo_danio = defiende.recibir_ataque(ataque_elegido, tipo_elemento_ataque)
 
         return "Continuar"
-
-
-if __name__ == '__main__':
-    b = Batalla()
-    b2 = Batalla()
-    elementos1 = [Elemento.AIRE, Elemento.TIERRA]
-    nombre1 = "suri"
-
-    elementos2 = [Elemento.AIRE, Elemento.AGUA]
-    nombre2 = "pini"
-
-    m1 = Monstruo(1, nombre1, elementos1)
-    m2 = Monstruo(2, nombre2, elementos2)
-
-    m1.vida = 80
-    m2.vida = 70
-
-    b.jugadores.append(m1)
-    b.jugadores.append(m2)
-
-    b.turno = Turno.Jugador1
-
-    #with open('.//savedgames//data.save', 'wb') as output:
-    #    pickle.dump(b, output, pickle.HIGHEST_PROTOCOL)
-
-    #with open('.//savedgames//data.save', 'rb') as load:
-    #    b2 = pickle.load(load)
-    #    print(b2)

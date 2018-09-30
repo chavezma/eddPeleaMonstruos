@@ -210,6 +210,12 @@ if __name__ == '__main__':
 
             elif myJuego.estado == "Continuar":
 
+                if len(myJuego.batalla.jugadores) < 2:
+                    print("\n\tParece ser que no se han configurado los jugadores...")
+                    input("\n\tPresionar cualquier tecla para volver al menu principal")
+                    myJuego.estado = "Menu Principal"
+                    continue
+
                 mAt = myJuego.batalla.obtener_atacante()
                 mDf = myJuego.batalla.obtener_defensor()
 
@@ -229,6 +235,14 @@ if __name__ == '__main__':
                     print("\tResumen ronda:")
                     print(myJuego.batalla)
                     input()
+
+                if myJuego.batalla.finalizado(mDf):
+                    print("\n\t" + mDf.nombre + " se ha quedado sin puntos de vida")
+                    print("\t\tEl juegador " + mAt.nombre + " es el ganador")
+                    input("\n\t Presuione alguna tecla para volver al menu principial")
+                    myJuego.batalla = Batalla()
+                    myJuego.estado = "Menu Principal"
+                    continue
 
                 myJuego.batalla.actualizar_turno()
 
