@@ -11,11 +11,11 @@ class JuegoGuardadoExisteException(Exception):
     pass
 
 
-class JuegoOpcionInvalidaException(Exception):
+class JuegoGuardarException(Exception):
     pass
 
 
-class JuegoGuardarException(Exception):
+class JuegoOpcionInvalidaException(Exception):
     pass
 
 

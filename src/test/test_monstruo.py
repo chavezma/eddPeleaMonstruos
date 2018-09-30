@@ -25,14 +25,14 @@ class TestMonstruo(unittest.TestCase):
     # por ser FUEGO tiene plus contra AGUA
     # por ser AGUA tiene plus contra TIERRA
     def test_calcular_disminucion_danio_normal(self):
-        danio_base = TipoAtaque.NORMAL.value
+        danio_base = TipoAtaque.NORMAL.value[0]
         self.assertEqual(self.myMonstruo.calcular_disminucion_danio(danio_base, Elemento(Elemento.AGUA)), 2, "error al validar daño normal contra AGUA")
         self.assertEqual(self.myMonstruo.calcular_disminucion_danio(danio_base, Elemento(Elemento.TIERRA)), 2, "error al validar daño normal contra TIERRA")
         self.assertEqual(self.myMonstruo.calcular_disminucion_danio(danio_base, Elemento(Elemento.AIRE)), 0, "error al validar daño normal contra AIRE")
         self.assertEqual(self.myMonstruo.calcular_disminucion_danio(danio_base, Elemento(Elemento.FUEGO)), 0, "error al validar daño normal contra FUEGO")
 
     def test_calcular_disminucion_danio_especial(self):
-        danio_base = TipoAtaque.ESPECIAL.value
+        danio_base = TipoAtaque.ESPECIAL.value[0]
         self.assertEqual(self.myMonstruo.calcular_disminucion_danio(danio_base, Elemento(Elemento.AGUA)), 3, "error al validar daño especial contra AGUA")
         self.assertEqual(self.myMonstruo.calcular_disminucion_danio(danio_base, Elemento(Elemento.TIERRA)), 3, "error al validar daño especial contra TIERRA")
         self.assertEqual(self.myMonstruo.calcular_disminucion_danio(danio_base, Elemento(Elemento.AIRE)), 0, "error al validar daño especial contra AIRE")

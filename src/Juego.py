@@ -1,7 +1,6 @@
 import os
 import sys
 import pickle
-import signal
 from Consola import Consola
 from Batalla import Batalla
 from Monstruo import Monstruo
@@ -14,10 +13,6 @@ from JuegoExcepciones import JuegoMenuPrincipalException
 from JuegoExcepciones import JuegoOpcionInvalidaException
 
 
-def handler(signum, frame):
-    print("control-z")
-
-
 class Juego(Consola):
     batalla = Batalla()
     estado = ""
@@ -28,6 +23,13 @@ class Juego(Consola):
         self.dict_opciones_menu_principal = {1: "Nuevo Juego", 2: "Continuar", 3: "Cargar Juego", 4: "Salir"}
         self.dict_opciones_elementos = {1: Elemento.AIRE, 2: Elemento.TIERRA, 3: Elemento.AGUA, 4: Elemento.FUEGO,
                                         5: "Atras"}
+
+    def validar_nombre(self, cadena):
+        for char in cadena:
+            if not char.isalnum() and char is not '_':
+                return False
+
+        return True
 
     def juegos_guardados(self):
         dict_juegos_guardados = dict()
@@ -46,12 +48,21 @@ class Juego(Consola):
 
     def guardar_juego(self):
         archivo = ""
-        archivo = input("\n\t\tElija un nombre (sin extension) para el archivo: ")
+        print("\tEl nombre de archivo, debe ser sin extension, solo se aceptan alfanumericos y guion bajo\n")
+        print("\tDejar vacío para volver al menu principal\n")
+        archivo = input("\tIngrese el nombre: ")
+
+        if len(archivo) == 0:
+            raise JuegoMenuPrincipalException
+
+        if self.validar_nombre(archivo):
+            input("\n\tEl formato es incorrecto, por favor vuelva a intentarlo")
+            raise JuegoGuardarException
 
         exists = os.path.isfile('.//savedgames//' + archivo + ".save")
 
         if exists:
-            print("El archivo ya existe, utilice otro nombre.")
+            input("El archivo ya existe, utilice otro nombre.")
             raise JuegoGuardadoExisteException
         else:
             with open('.//savedgames//' + archivo + ".save", 'wb') as output:
@@ -175,6 +186,12 @@ if __name__ == '__main__':
                 except JuegoGuardadoExisteException:
                     myJuego.estado = "Guardar"
                     continue
+                except JuegoGuardarException:
+                    myJuego.estado = "Guardar"
+                    continue
+                except JuegoMenuPrincipalException:
+                    myJuego.estado = "Menu Principal"
+                    continue
                 continue
 
             elif myJuego.estado == "Cargar Juego":
@@ -221,5 +238,12 @@ if __name__ == '__main__':
             else:
                 myJuego.estado = "Menu Principal"
 
+        print("\nEspero te hayas divertido.\n")
+
     except KeyboardInterrupt:
         sys.exit(0)
+    except EOFError as error:
+        # Output expected EOFErrors.
+        print(error)
+        sys.exit(0)
+

@@ -1,5 +1,6 @@
 from Elemento import Elemento
 from Elemento import Turno
+from Elemento import TipoAtaque
 import Monstruo
 import JuegoExcepciones
 
@@ -43,6 +44,10 @@ class Batalla:
         restart = 0
 
         defiende = self.obtener_defensor()
+        atacante = self.obtener_atacante()
+
+        if ataque_elegido == TipoAtaque.ESPECIAL:
+            atacante.cant_esp_att += 1
 
         self.calculo_danio = defiende.recibir_ataque(ataque_elegido, tipo_elemento_ataque)
 
