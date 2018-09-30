@@ -2,14 +2,24 @@ from enum import Enum
 
 
 class TipoAtaque(Enum):
-    NORMAL = 10
-    ESPECIAL = 15
+    NORMAL = (10, "NORMAL")
+    ESPECIAL = (15, "ESPECIAL")
 
+    def __str__(self):
+        return self.value[1]
 
 class Turno(Enum):
     Jugador1 = 0
     Jugador2 = 1
 
+
+class Ataque:
+    def __init__(self, tipo, elem):
+        self.tipo = TipoAtaque(tipo)
+        self.elem = Elemento(elem)
+
+    def __str__(self):
+        return self.tipo.value[1] + " " + self.elem.value[1]
 
 class Elemento(Enum):
     NONE = (0, "NADA")

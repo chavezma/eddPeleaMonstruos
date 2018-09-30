@@ -1,5 +1,6 @@
-from src.Elemento import Elemento
-from src.Elemento import TipoAtaque
+from Elemento import Elemento
+from Elemento import TipoAtaque
+from Elemento import Ataque
 
 
 class Monstruo:
@@ -14,10 +15,7 @@ class Monstruo:
         self.id_jugador = id
 
     def __str__(self):
-        printelem = "["
-        for x in self.elementos:
-            printelem += str(x) + ","
-        printelem += "]"
+        printelem = "[" + str(self.elementos[0]) + ", " + str(self.elementos[1]) + "]"
 
         return "\tMonstruo = [" + self.nombre + "] at_esp_usados [" + str(self.cant_esp_att) + "/" + str(self.max_cant_esp_att) + "] vida [" + str(self.vida) + "] - elementos " + printelem
         # return self.nombre + ";" + str(self.vida) + ";" + printelem
@@ -58,7 +56,7 @@ class Monstruo:
         plus_ataque = 0
         plus_defensa = 0
 
-        danio_base = t_ataque.value
+        danio_base = t_ataque.value[0]
 
         plus_defensa = self.calcular_disminucion_danio(danio_base, t_elem_ataque)
         plus_ataque = self.calcular_aumento_danio(danio_base, t_elem_ataque)
@@ -66,9 +64,22 @@ class Monstruo:
 
         self.actulizar_vida(danio_total)
 
-        # Retorna el danio total, la vida resultante, y un string con el calculo del danio realizado en la instancia
-        # str("[ " + str(danio_total) + " = " + str(danio_base) + " + " + str(plus_ataque) + " - " + str(plus_defensa) + "]")
-        return danio_total, danio_base, plus_ataque, plus_defensa
+        return [danio_total, danio_base, plus_ataque, plus_defensa]
+
+    def ataques_posibles(self):
+        dict_opciones_ataque = dict()
+        idx_op = 1
+
+        for elem in self.elementos:
+            dict_opciones_ataque[idx_op] = Ataque(TipoAtaque.NORMAL, elem)
+            idx_op += 1
+
+        if self.cant_esp_att < self.max_cant_esp_att:
+            for elem in self.elementos:
+                dict_opciones_ataque[idx_op] = Ataque(TipoAtaque.ESPECIAL, elem)
+                idx_op += 1
+
+        return dict_opciones_ataque
 
 
 if __name__ == '__main__':
