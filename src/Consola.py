@@ -24,7 +24,14 @@ class Consola():
     def pedir_opcion_menu(self, dictopcion):
         try:
             self.dibujar_menu(dictopcion)
-            idxopcion = int(input("\n\tElegir una opción: "))
+
+            out =  input("\n\tElegir una opción: ")
+
+            if len(out) == 0:
+                input("\n\tNo se ha ingresado opcion, se retorna al menu principal")
+                return "Menu Principal"
+            else:
+                idxopcion = int(out)
 
             if idxopcion not in dictopcion.keys():
                 raise JuegoOpcionInvalidaException
@@ -44,17 +51,11 @@ class Consola():
 
     def pedir_nombre(self):
         try:
-            return input("\n\tIngrese su nombre: ")
+            nombre=input("\n\tIngrese su nombre: ")
+
+            if len(nombre) == 0:
+                input("\n\tNo se puede ingresar un nombre vacio...\n\tPresione cualquier tecla para volver al menu principal")
+                raise JuegoMenuPrincipalException
+
         except KeyboardInterrupt:
             raise JuegoMenuPrincipalException
-
-
-if __name__ == '__main__':
-    dict_opciones_menu_principal = {1: "Nuevo Juego", 2: "Continuar", 3: "Cargar Juego", 4: "Salir"}
-    dict_opciones_elementos = {1: "AIRE", 2: "TIERRA", 3: "AGUA", 4: "FUEGO"}
-    dict_opciones_ataque = {1: "AIRE", 2: "TIERRA", 3: "AGUA", 4: "FUEGO"}
-
-    c = Consola()
-    c.pedir_opcion(dict_opciones_menu_principal)
-
-    c.pedir_opcion(dict_opciones_elementos)

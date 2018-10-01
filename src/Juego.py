@@ -24,9 +24,11 @@ class Juego(Consola):
         self.dict_opciones_elementos = {1: Elemento.AIRE, 2: Elemento.TIERRA, 3: Elemento.AGUA, 4: Elemento.FUEGO,
                                         5: "Atras"}
 
-    def validar_nombre(self, cadena):
+    def es_nombre_valido(self, cadena):
         for char in cadena:
-            if not char.isalnum() or char is not '_':
+            if char.isalnum() or char == '_':
+                continue
+            else:
                 return False
         return True
 
@@ -54,7 +56,7 @@ class Juego(Consola):
         if len(archivo) == 0:
             raise JuegoMenuPrincipalException
 
-        if self.validar_nombre(archivo):
+        if not self.es_nombre_valido(archivo):
             input("\n\tEl formato es incorrecto, por favor vuelva a intentarlo")
             raise JuegoGuardarException
 
