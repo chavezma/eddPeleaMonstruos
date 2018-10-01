@@ -26,9 +26,8 @@ class Juego(Consola):
 
     def validar_nombre(self, cadena):
         for char in cadena:
-            if not char.isalnum() and char is not '_':
+            if not char.isalnum() or char is not '_':
                 return False
-
         return True
 
     def juegos_guardados(self):
@@ -114,7 +113,7 @@ class Juego(Consola):
                 self.print_elementos(len(elementos) + 1)
                 opcion = self.pedir_opcion_menu(self.dict_opciones_elementos)
 
-                if opcion == "Atras":
+                if opcion in ["Atras", "Menu Principal"]:
                     raise JuegoMenuPrincipalException
                 else:
                     elementos.append(Elemento(opcion))
