@@ -107,22 +107,25 @@ class Juego(Consola):
         self.titulo()
 
         print("\n\t\t****  Cargando informacion del jugador " + str(id_jugador) + " ****")
-        nombre = self.pedir_nombre()
 
-        while len(elementos) < 2:
-            try:
+        try:
+            nombre = str(input("\tIngrese su nick: "))
 
-                self.print_elementos(len(elementos) + 1)
-                opcion = self.pedir_opcion_menu(self.dict_opciones_elementos)
+            while len(elementos) < 2:
 
-                if opcion in ["Atras", "Menu Principal"]:
-                    raise JuegoMenuPrincipalException
-                else:
-                    elementos.append(Elemento(opcion))
+                    self.print_elementos(len(elementos) + 1)
+                    opcion = self.pedir_opcion_menu(self.dict_opciones_elementos)
 
-            except JuegoOpcionInvalidaException:
-                input("\t\tOpcion invalida, reiniciando creacion de monstruo...")
-                raise JuegoCrearMonstruoException
+                    if opcion in ["Atras", "Menu Principal"]:
+                        raise JuegoMenuPrincipalException
+                    else:
+                        elementos.append(Elemento(opcion))
+
+        except JuegoOpcionInvalidaException:
+            input("\t\tOpcion invalida, reiniciando creacion de monstruo...")
+            raise JuegoCrearMonstruoException
+        except KeyboardInterrupt:
+            raise JuegoMenuPrincipalException
 
         return Monstruo(id_jugador, nombre, elementos)
 

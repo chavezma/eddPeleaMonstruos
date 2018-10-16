@@ -17,7 +17,7 @@ class Monstruo:
     def __str__(self):
         printelem = "[" + str(self.elementos[0]) + ", " + str(self.elementos[1]) + "]"
 
-        return "\tMonstruo = [" + self.nombre + "] at_esp_usados [" + str(self.cant_esp_att) + "/" + str(self.max_cant_esp_att) + "] vida [" + str(self.vida) + "] - elementos " + printelem
+        return "\tMonstruo = [" + str(self.nombre) + "] at_esp_usados [" + str(self.cant_esp_att) + "/" + str(self.max_cant_esp_att) + "] vida [" + str(self.vida) + "] - elementos " + printelem
         # return self.nombre + ";" + str(self.vida) + ";" + printelem
 
     def calcular_disminucion_danio(self, danio_base, t_elem_ataque):
