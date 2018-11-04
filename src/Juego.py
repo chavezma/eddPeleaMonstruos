@@ -169,8 +169,13 @@ if __name__ == '__main__':
             elif myJuego.estado == "Nuevo Juego":
                 try:
 
-                    while len(myJuego.batalla.jugadores) < 2:
-                        myJuego.batalla.jugadores.append(myJuego.crear_monstruo())
+                    aux_batalla = Batalla()
+                    #while len(myJuego.batalla.jugadores) < 2:
+                    #    myJuego.batalla.jugadores.append(myJuego.crear_monstruo())
+                    while len(aux_batalla.jugadores) < 2:
+                        aux_batalla.jugadores.append(myJuego.crear_monstruo())
+
+                    myJuego.batalla = aux_batalla
 
                 except JuegoCrearMonstruoException:
                     myJuego.estado = "Nuevo Juego"
