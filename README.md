@@ -1,8 +1,8 @@
 # Batallas de Monstruos
 
-Trabajo Práctico Nº 1 
-Estructuras de Datos 
-Universidad Nacional de Tres de Febrero
+- Trabajo Práctico Nº 1 
+- Estructuras de Datos 
+- Universidad Nacional de Tres de Febrero
 
 ## Integrantes
 
