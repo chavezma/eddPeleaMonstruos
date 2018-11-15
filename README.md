@@ -26,7 +26,7 @@ guardar una partida en disco y luego recuperarla y continuar.
 
 ### Clase `Elemento`
 
-Descripción utilizando Notebook del [módulo `Elemento`](elemento.ipynb)
+Descripción utilizando Notebook del [módulo `Elemento`](./jupyter/elemento.ipynb)
 
 ### Clase `Monstruo`
 
