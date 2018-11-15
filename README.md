@@ -30,7 +30,7 @@ Descripción utilizando Notebook del [módulo `Elemento`](./jupyter/elemento.ipy
 
 ### Clase `Monstruo`
 
-Descripción utilizando Notebook del [módulo `Monstruo`](monstruo.ipynb)
+Descripción utilizando Notebook del [módulo `Monstruo`](./jupyter/monstruo.ipynb)
 
 ### Clase `Batalla`
 
