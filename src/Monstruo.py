@@ -1,13 +1,13 @@
-from Elemento import Elemento
-from Elemento import TipoAtaque
-from Elemento import Ataque
+from src.Elemento import *
 
 
-class Monstruo:
+class Monstruo():
 
     # Un monstruo recibe el nombre y una lista de elementos
     def __init__(self, id, nombre, elementos):
+        assert nombre, 'El nombre no puede ser vacio'
         self.nombre = nombre
+        assert len(elementos) == 2, 'Debe tener dos elementos'
         self.elementos = elementos
         self.vida = 100
         self.max_cant_esp_att = 4
@@ -44,7 +44,7 @@ class Monstruo:
 
         return plus_ataque
 
-    def actulizar_vida(self, danio):
+    def actualizar_vida(self, danio):
         self.vida -= danio
 
         if self.vida < 0:
@@ -62,7 +62,7 @@ class Monstruo:
         plus_ataque = self.calcular_aumento_danio(danio_base, t_elem_ataque)
         danio_total = danio_base + plus_ataque - plus_defensa
 
-        self.actulizar_vida(danio_total)
+        self.actualizar_vida(danio_total)
 
         return [danio_total, danio_base, plus_ataque, plus_defensa]
 
@@ -84,12 +84,14 @@ class Monstruo:
 
 if __name__ == '__main__':
     elementos = [Elemento.AIRE, Elemento.TIERRA]
-    nombre = "suri"
+    nombre = "Splinter"
 
     ataque = TipoAtaque.ESPECIAL
     t_at = Elemento.FUEGO
 
     m = Monstruo(1, nombre, elementos)
+
+    print(m.ataques_posibles())
 
     m.recibir_ataque(ataque, t_at)
 
