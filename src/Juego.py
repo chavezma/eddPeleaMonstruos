@@ -30,6 +30,10 @@ class Juego(Consola):
                 continue
             else:
                 return False
+
+        if not cadena:
+            return False
+
         return True
 
     def juegos_guardados(self):
@@ -99,9 +103,9 @@ class Juego(Consola):
 
         print("\tElija su " + elem + " elemento")
 
-    def crear_monstruo(self):
+    def crear_monstruo(self, idx_jugador):
 
-        id_jugador = len(self.batalla.jugadores) + 1
+        id_jugador = idx_jugador + 1
         elementos = []
 
         self.titulo()
@@ -110,6 +114,10 @@ class Juego(Consola):
 
         try:
             nombre = str(input("\tIngrese su nick: "))
+
+            if not nombre:
+                input("\n\tNo se puede ingresar un nombre vacio...")
+                raise JuegoCrearMonstruoException
 
             while len(elementos) < 2:
 
@@ -173,7 +181,7 @@ if __name__ == '__main__':
                     #while len(myJuego.batalla.jugadores) < 2:
                     #    myJuego.batalla.jugadores.append(myJuego.crear_monstruo())
                     while len(aux_batalla.jugadores) < 2:
-                        aux_batalla.jugadores.append(myJuego.crear_monstruo())
+                        aux_batalla.jugadores.append(myJuego.crear_monstruo(len(aux_batalla.jugadores)))
 
                     myJuego.batalla = aux_batalla
 

@@ -53,7 +53,7 @@ class Consola():
         try:
             nombre=input("\n\tIngrese su nombre: ")
 
-            if len(nombre) == 0:
+            if not nombre:
                 input("\n\tNo se puede ingresar un nombre vacio...\n\tPresione cualquier tecla para volver al menu principal")
                 raise JuegoMenuPrincipalException
 
