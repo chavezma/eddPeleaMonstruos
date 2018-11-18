@@ -1,7 +1,6 @@
 import os
 import sys
-from JuegoExcepciones import JuegoOpcionInvalidaException
-from JuegoExcepciones import JuegoMenuPrincipalException
+from src.JuegoExcepciones import *
 
 
 class Consola():
@@ -14,6 +13,21 @@ class Consola():
         print("\t**********************************************")
         return
 
+    def mostrar_turno(self, turno):
+        print("\t****  Es el turno de [" + str(turno) + "] ****")
+        print("\t**********************************************")
+
+    # def pedir_nombre(self):
+    #     try:
+    #         nombre=input("\n\tIngrese su nombre: ")
+    #
+    #         if not nombre:
+    #             input("\n\tNo se puede ingresar un nombre vacio...\n\tPresione cualquier tecla para volver al menu principal")
+    #             raise JuegoMenuPrincipalException
+    #
+    #     except KeyboardInterrupt:
+    #         raise JuegoMenuPrincipalException
+
     def dibujar_menu(self, dictmenu):
         idxopcion = 0
         #self.titulo()
@@ -24,8 +38,7 @@ class Consola():
     def pedir_opcion_menu(self, dictopcion):
         try:
             self.dibujar_menu(dictopcion)
-
-            out =  input("\n\tElegir una opción: ")
+            out = input("\n\tElegir una opción: ")
 
             if len(out) == 0:
                 input("\n\tNo se ha ingresado opcion, se retorna al menu principal")
@@ -45,17 +58,5 @@ class Consola():
 
         return dictopcion[idxopcion]
 
-    def mostrar_turno(self, turno):
-        print("\t****  Es el turno de [" + str(turno) + "] ****")
-        print("\t**********************************************")
 
-    def pedir_nombre(self):
-        try:
-            nombre=input("\n\tIngrese su nombre: ")
 
-            if not nombre:
-                input("\n\tNo se puede ingresar un nombre vacio...\n\tPresione cualquier tecla para volver al menu principal")
-                raise JuegoMenuPrincipalException
-
-        except KeyboardInterrupt:
-            raise JuegoMenuPrincipalException

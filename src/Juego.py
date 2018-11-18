@@ -4,13 +4,8 @@ import pickle
 from Consola import Consola
 from Batalla import Batalla
 from Monstruo import Monstruo
-from Elemento import Elemento
-from Elemento import Turno
-from JuegoExcepciones import JuegoGuardarException
-from JuegoExcepciones import JuegoGuardadoExisteException
-from JuegoExcepciones import JuegoCrearMonstruoException
-from JuegoExcepciones import JuegoMenuPrincipalException
-from JuegoExcepciones import JuegoOpcionInvalidaException
+from Elemento import *
+from JuegoExcepciones import *
 
 
 class Juego(Consola):
@@ -36,21 +31,6 @@ class Juego(Consola):
 
         return True
 
-    def juegos_guardados(self):
-        dict_juegos_guardados = dict()
-        total_juegos = 1
-        # Buscar el archivo batalla.save para dar a elegir que juego jugar.
-        for files in os.walk(".\\savedgames"):
-            for filename in files:
-                for file in filename:
-                    if file.endswith(".save"):
-                        dict_juegos_guardados[total_juegos] = file
-                        total_juegos = total_juegos + 1
-
-        dict_juegos_guardados[total_juegos] = "Atras"
-
-        return dict_juegos_guardados
-
     def guardar_juego(self):
         archivo = ""
         print("\tEl nombre de archivo, debe ser sin extension, solo se aceptan alfanumericos y guion bajo\n")
@@ -75,6 +55,21 @@ class Juego(Consola):
 
         print("\n\t\tarchivo guardado con exito.")
         input("\t\tPresione cualquier tecla para continuar...")
+
+    def juegos_guardados(self):
+        dict_juegos_guardados = dict()
+        total_juegos = 1
+        # Buscar el archivo batalla.save para dar a elegir que juego jugar.
+        for files in os.walk(".\\savedgames"):
+            for filename in files:
+                for file in filename:
+                    if file.endswith(".save"):
+                        dict_juegos_guardados[total_juegos] = file
+                        total_juegos = total_juegos + 1
+
+        dict_juegos_guardados[total_juegos] = "Atras"
+
+        return dict_juegos_guardados
 
     def cargar_juego(self):
 

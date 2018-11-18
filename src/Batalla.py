@@ -1,14 +1,15 @@
-from Elemento import Elemento
-from Elemento import Turno
-from Elemento import TipoAtaque
-import Monstruo
+from src.Elemento import Elemento
+from src.Elemento import Turno
+from src.Elemento import TipoAtaque
+import src.Monstruo
+
 
 class Batalla:
 
     def __init__(self):
         self.jugadores = []
         self.turno = Turno(0)
-        self.jugador = 1
+        #self.jugador = 1
         self.ronda = 0
         # Variables para el calculo del ultimo danio realizado --> danio_total, danio_base, plus_ataque, plus_defensa
         self.calculo_danio = [0, 0, 0, 0]
