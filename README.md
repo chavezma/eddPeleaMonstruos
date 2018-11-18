@@ -26,7 +26,7 @@ guardar una partida en disco y luego recuperarla y continuar.
 
 ### Clase `JuegoExcepciones`
 
-Descripción utilizando Notebook del [módulo `Elemento`](./jupyter/excepciones.ipynb)
+Descripción utilizando Notebook del [módulo `JuegoExcepciones`](./jupyter/excepciones.ipynb)
 
 ### Clase `Elemento`
 
