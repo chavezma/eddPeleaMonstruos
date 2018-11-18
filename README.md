@@ -24,6 +24,10 @@ guardar una partida en disco y luego recuperarla y continuar.
 
 ![Diagrama de clases](/)
 
+### Clase `JuegoExcepciones`
+
+Descripción utilizando Notebook del [módulo `Elemento`](./jupyter/excepciones.ipynb)
+
 ### Clase `Elemento`
 
 Descripción utilizando Notebook del [módulo `Elemento`](./jupyter/elemento.ipynb)
@@ -34,12 +38,12 @@ Descripción utilizando Notebook del [módulo `Monstruo`](./jupyter/monstruo.ipy
 
 ### Clase `Batalla`
 
-Descripción utilizando Notebook del [módulo `Batalla`](batallai.pynb)
+Descripción utilizando Notebook del [módulo `Batalla`](./jupyter/batalla.pynb)
 
 ### Clase `Consola`
 
-Descripción utilizando Notebook del [módulo `Consola`](consola.ipynb)
+Descripción utilizando Notebook del [módulo `Consola`](./jupyter/consola.ipynb)
 
 ### Clase `Juego`
 
-Descripción utilizando Notebook del [módulo `Juego`](juego.ipynb)
+Descripción utilizando Notebook del [módulo `Juego`](./jupyter/juego.ipynb)
