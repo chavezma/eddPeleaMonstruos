@@ -211,6 +211,7 @@ if __name__ == '__main__':
                 try:
                     myJuego.cargar_juego()
                 except JuegoOpcionInvalidaException:
+                    input("\n\tLa opcion ingresada no es válida, vuelva a intentarlo...")
                     myJuego.estado = "Cargar Juego"
                     continue
                 except JuegoMenuPrincipalException:
@@ -232,15 +233,20 @@ if __name__ == '__main__':
                 mDf = myJuego.batalla.obtener_defensor()
 
                 myJuego.mostrar_turno(myJuego.batalla.turno)
-                dic_ataque = myJuego.elegir_ataque(mAt)
-                opcion = myJuego.pedir_opcion_menu(dic_ataque)
+                try:
+                    dic_ataque = myJuego.elegir_ataque(mAt)
+                    opcion = myJuego.pedir_opcion_menu(dic_ataque)
 
-                if opcion in ["Menu Principal", "Guardar"]:
-                    myJuego.estado = opcion
+                    if opcion in ["Menu Principal", "Guardar"]:
+                        myJuego.estado = opcion
+                        continue
+
+                    myJuego.batalla.pelear(opcion.tipo, opcion.elem)
+                    myJuego.resumen_danio(mDf)
+                except JuegoOpcionInvalidaException:
+                    input("\n\tLa opcion ingresada no es válida, se retorna al menu principal")
+                    myJuego.estado = "Menu Principal"
                     continue
-
-                myJuego.batalla.pelear(opcion.tipo, opcion.elem)
-                myJuego.resumen_danio(mDf)
 
                 if myJuego.batalla.turno == Turno.Jugador2:
                     myJuego.batalla.ronda += 1

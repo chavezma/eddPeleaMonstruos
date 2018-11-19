@@ -1,4 +1,4 @@
-from src.Elemento import *
+from Elemento import *
 
 
 class Monstruo():

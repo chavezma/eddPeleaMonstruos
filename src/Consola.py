@@ -1,6 +1,6 @@
 import os
 import sys
-from src.JuegoExcepciones import *
+from JuegoExcepciones import *
 
 
 class Consola():

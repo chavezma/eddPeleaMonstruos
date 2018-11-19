@@ -1,7 +1,5 @@
-from src.Elemento import Elemento
-from src.Elemento import Turno
-from src.Elemento import TipoAtaque
-import src.Monstruo
+from Elemento import *
+import Monstruo
 
 
 class Batalla:
