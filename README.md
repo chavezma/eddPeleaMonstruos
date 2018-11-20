@@ -38,7 +38,7 @@ Descripción utilizando Notebook del [módulo `Monstruo`](./jupyter/monstruo.ipy
 
 ### Clase `Batalla`
 
-Descripción utilizando Notebook del [módulo `Batalla`](./jupyter/batalla.pynb)
+Descripción utilizando Notebook del [módulo `Batalla`](./jupyter/batalla.ipynb)
 
 ### Clase `Consola`
 
