@@ -55,26 +55,26 @@ class TestMonstruo(unittest.TestCase):
         self.assertEqual(self.myMonstruo.calcular_aumento_danio(danio_base, Elemento(Elemento.AIRE)), 3, "error al validar daño contra AIRE")
         self.assertEqual(self.myMonstruo.calcular_aumento_danio(danio_base, Elemento(Elemento.FUEGO)), 0, "error al validar daño contra FUEGO")
 
-    def test_actulizar_vida(self):
+    def test_actualizar_vida(self):
         danio1 = 10
         danio2 = 40
         danio3 = 80
         danio4 = 110
 
         self.myMonstruo.vida = 100
-        self.myMonstruo.actulizar_vida(danio1)
+        self.myMonstruo.actualizar_vida(danio1)
         self.assertEqual(self.myMonstruo.vida, 90, "error al actualizar vida tras danio1")
 
         self.myMonstruo.vida = 100
-        self.myMonstruo.actulizar_vida(danio2)
+        self.myMonstruo.actualizar_vida(danio2)
         self.assertEqual(self.myMonstruo.vida, 60, "error al actualizar vida tras danio")
 
         self.myMonstruo.vida = 100
-        self.myMonstruo.actulizar_vida(danio3)
+        self.myMonstruo.actualizar_vida(danio3)
         self.assertEqual(self.myMonstruo.vida, 20, "error al actualizar vida tras danio3")
 
         self.myMonstruo.vida = 100
-        self.myMonstruo.actulizar_vida(danio4)
+        self.myMonstruo.actualizar_vida(danio4)
         self.assertEqual(self.myMonstruo.vida, 0, "error al actualizar vida tras danio4")
 
     def test_recibir_danio_normal_sin_bonus(self):
