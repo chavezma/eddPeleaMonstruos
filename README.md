@@ -22,7 +22,7 @@ guardar una partida en disco y luego recuperarla y continuar.
 
 ### Diagrama de clases
 
-![Diagrama de clases](./jupyter/uml.jpg)
+![Diagrama de clases](./jupyter/uml.jpeg)
 
 ### Clase `JuegoExcepciones`
 
